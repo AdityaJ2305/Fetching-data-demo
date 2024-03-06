@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
+  const [data, setData] = useState([]);
+  useEffect(()=>{
+    // const response = fetch("https://dummyjson.com/products")
+    // .then((res) => res.json())
+    // .then((js) => setData(js.products));
+
+    async function fetchData(){
+      let response = await axios.get("https://dummyjson.com/products");
+      console.log(response.data)
+      setData(response.data.products)
+    }
+    fetchData();
+  },[])
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <>
+  <div className="main">
+  <ul>
+  {data.map((value,index)=><li key={index} style={{listStyle:"none"}}><img src={value.thumbnail}/> <br/> {value.title}<br/> {value.description} <button>Add ${value.price}</button></li>)}
+  </ul>
+  </div>
+  </>
   );
 }
 
